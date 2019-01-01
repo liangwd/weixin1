@@ -1,0 +1,20 @@
+<p>城市 {{province}} {{city}}</p>
+<view wx:for="{{results[0].weather_data}}">
+<!-- <text>{{index}}</text> -->
+<view>
+<image class="imgTq" src='{{item.dayPictureUrl}}'></image>
+<image class="imgTq" src='{{item.nightPictureUrl}}'></image>
+</view>
+
+<text>{{item.date}} </text>
+<text> {{item.weather}}</text>
+<text> {{item.wind}}</text>
+<text> {{item.temperature}}</text>
+</view>
+
+<view wx:for="{{results[0].index}}">
+<text>
+{{item.title}} : {{item.zs}}
+{{item.tipt}} : {{item.des}}
+</text>
+</view>
