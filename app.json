@@ -1,9 +1,56 @@
 {
 
 "pages":[
-  "pages/index/index"
+  "pages/home/home",
+  "pages/weather/weather",
+  "pages/map/map",
+  "pages/search/search",
+  "pages/person/person"
 ],
 
+  "permission": {
+    "scope.userLocation": {
+      "desc": "你的位置信息将用于小程序位置接口的效果展示"
+    }
+  },
+
+"window": {
+  "navigationBarBackgroundColor": "#ffffff",
+  "navigationBarTextStyle": "black",
+  "navigationBarTitleText": "",
+  "backgroundColor": "#eeeeee",
+  "backgroundTextStyle": "light",
+  "enablePullDownRefresh": false
+},
+
+"tabBar": {
+  "list": [{
+    "pagePath": "pages/home/home",
+    "text": "首页",
+    "iconPath": "images/home.png",
+    "selectedIconPath": "images/home_selected.png"
+   },{
+    "pagePath": "pages/weather/weather",
+    "text": "天气",
+    "iconPath": "images/weather.png",
+    "selectedIconPath": "images/weather_selected.png"
+   },{
+    "pagePath": "pages/map/map",
+    "text": "地图",
+    "iconPath": "images/map.png",
+    "selectedIconPath": "images/map_selected.png" 
+   },{
+    "pagePath": "pages/search/search",
+    "text": "音乐",
+    "iconPath": "images/audio.png",
+    "selectedIconPath": "images/audio_selected.png"
+   },{
+    "pagePath": "pages/person/person",
+    "text": "我的",
+    "iconPath": "images/person.png",
+    "selectedIconPath": "images/person_press.png"
+  }]
+},
 "debug":false
 
 }
