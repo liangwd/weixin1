@@ -1,0 +1,26 @@
+<!-- <picker mode = "selector" bindchange="bindPickerChange" value="{{index}}" range="{{array}}">111</picker> -->
+<!-- bindblur='searchMap' -->
+
+  <view class='searchInput'>
+    <icon class="searchcion" size='20' type='search'></icon>  
+    <input placeholder ='周边搜索' type='text'bindinput="bindKeyInput" value='{{inputPlace}}' auto-focus></input>
+    <view class='searchLabel' bindtap='searchPlace' id="view">搜索</view>
+  </view>
+
+
+<cover-view class='searchplace_list' wx:for="{{list}}" wx:key="unique">
+<button  bindtap='searchPlace' data-name='{{item}}' id='button'>{{item}}</button>
+</cover-view>
+
+  <view class="map_container">
+    <map class="map" id="map" longitude="{{longitude}}" latitude="{{latitude}}" scale="14" show-location="true" markers="{{markers}}" bindmarkertap="makertap">
+    </map>
+  </view>
+
+<view class="rgc_info">
+  <text wx:if="{{rgcData.title}}">名称:{{rgcData.title + '\n'}}</text>
+  <text wx:if="{{rgcData.address}}">地址:{{rgcData.address+ '\n'}}</text>
+  <text wx:if="{{rgcData.desc}}">描述:{{rgcData.desc+'\n'}}</text>
+  <text wx:if="{{rgcData.business}}">商圈:{{rgcData.business+'\n'}}</text>
+  <text wx:if="{{rgcData.telephone}}">电话:{{rgcData.telephone+'\n'}}</text>
+</view>

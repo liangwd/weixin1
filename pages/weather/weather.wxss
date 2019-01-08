@@ -1,0 +1,95 @@
+/* pages/index/index.wxss */
+page {
+    background-color:gray;
+
+}
+.bg
+{
+  width: 100%;
+  height: 550rpx;
+}
+
+.top
+{
+  margin: 20rpx;
+}
+.container{
+  width: 100%;
+  height: 500rpx;
+  position: absolute;
+  left: 0rpx;
+  top: 0rpx; 
+  display: block;
+  padding: 0rpx;
+  margin: 0rpx;
+}
+
+.info{
+  color: white;
+  font-size: 40rpx;
+}
+.w{
+  color: white;
+}
+.b{
+  font-weight:bold; 
+}
+.f{
+  font-size: 50rpx;
+}
+
+.weather{
+  padding-left: 40rpx;
+  margin-top:60rpx; 
+  width: 50%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around;
+}
+.detail{
+  width: 100%;
+  position: absolute;
+  bottom: 10rpx;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around;
+}
+.center{
+  text-align: center;
+  margin: auto 0;
+}
+
+.l{
+  height: 120rpx;
+  padding: 0rpx;
+  border-width: 1rpx;
+  border-color: #fff;
+  border-style: solid;
+}
+
+.imgTq {
+  width: 30px;
+  height:30px;
+  margin: 5rpx;
+}
+
+.hLayout
+{
+  width: 100%;
+  padding: 0rpx;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content:space-around;
+  border-bottom: 1rpx #fff solid;
+}
+
+.other{
+  width: 100%;
+  display: block;
+  flex-direction: column;
+  bottom: 0rpx;
+}
+

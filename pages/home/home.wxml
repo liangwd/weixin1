@@ -1,0 +1,20 @@
+<view>
+<text class='title'>域名ICP查询</text>
+<view class="icp_container"> 
+<icon class="searchcion" size='20' type='search'></icon>  
+<input bindinput='bindKeyInput' placeholder ='域名搜索(如:baidu.cn)' type='text'value="{{searchinfo}}"> </input>
+<view class='ok' bindtap='requestDomainICP'>查询</view>
+</view>
+
+<view class="view" wx:if="{{icpdata.type == 200}}">
+<view>主办单位名称: {{icpdata.name}}</view>
+<view>主办单位性质: {{icpdata.nature}}</view>
+<view>网站备案/许可证号: {{icpdata.icp}}</view>
+<view>网站名称: {{icpdata.sitename}}</view>
+<view>网站首页网址: {{icpdata.indexUrl}}</view>
+<view>审核时间: {{icpdata.checkDate}}</view>
+</view>
+<view class="view" wx:if="{{icpdata.type == 1}}">
+未备案或者备案取消，获取最新数据请(更新)
+</view>
+</view>

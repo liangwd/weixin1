@@ -1,0 +1,74 @@
+<image src='../../images/bg.jpg' class='bg'></image> 
+
+
+<view class='container' wx:if='{{weather_data}}'>
+
+<view class='top w'>{{province}} {{city}}</view> 
+<view class='top info'>{{weather_data[0].date}}</view>
+
+
+<view class='weather'>
+  <view class='center info'>天气</view>
+  <view> 
+    <image class="imgTq"  src='{{weather_data[0].dayPictureUrl}}'></image>
+    <image class="imgTq"  src='{{weather_data[0].nightPictureUrl}}'></image>
+  </view>
+  <view class='center w b f'>{{weather_data[0].weather}}</view>
+</view>
+
+<view class='detail'> 
+    <view>
+      <view class='center w'>PM25</view>
+      <view class='center w b f'>{{results[0].pm25}}</view>
+    </view>
+    <view class='l'></view>
+    <view>
+      <view class='center w'>风向</view>
+      <view class='center w b f'>{{weather_data[0].wind}}</view>
+    </view> 
+    <view class='l'></view> 
+    <view>
+      <view class='center w'>温度</view>
+      <view class='center w b f'>{{weather_data[0].temperature}}</view>
+    </view>
+  </view>
+</view>
+
+ <view>
+    <view class='other' wx:if="{{weather_data.length==4}}">
+    <view class='hLayout'>
+      <view class='w'>明天</view>
+      <view>
+      <image  class= 'imgTq' src='{{weather_data[1].dayPictureUrl}}'></image>
+      <image  class= 'imgTq' src='{{weather_data[1].nightPictureUrl}}'></image>
+      </view>
+      <view class='w'>{{weather_data[1].weather}}</view>
+      <view class='w'>{{weather_data[1].temperature}}</view>
+    </view>
+    <view class='hLayout'>
+      <view class='w'>后天</view>
+      <view>
+      <image  class= 'imgTq' src='{{weather_data[2].dayPictureUrl}}'></image>
+      <image  class= 'imgTq' src='{{weather_data[2].nightPictureUrl}}'></image>
+      </view>
+      <view class='w'>{{weather_data[2].weather}}</view>
+      <view class='w'>{{weather_data[2].temperature}}</view>
+    </view>
+    <view class='hLayout'>
+      <view class='w' >大后天</view>
+        <view>
+      <image  class= 'imgTq' src='{{weather_data[3].dayPictureUrl}}'></image>
+      <image  class= 'imgTq' src='{{weather_data[3].nightPictureUrl}}'></image>
+      </view>
+      <view class='w'>{{weather_data[3].weather}}</view>
+      <view class='w'>{{weather_data[3].temperature}}</view>
+    </view>
+    </view>
+    <view wx:for="{{results[0].index}}" wx:key="unique" wx:for-index="idx">
+      <text  wx:if="{{idx<=2}}" style='font-size:30rpx;color:white;'>{{item.des+'\n'}}</text>
+    </view>
+  </view>
+
+
+
+

@@ -1,0 +1,16 @@
+<!--pages/person/person.wxml-->
+<!-- 如果只是展示用户头像昵称，可以使用 <open-data /> 组件 -->
+<!-- 需要使用 button 来授权登录 -->
+<view class="person">
+  <image  class="photo" src='{{userinfo.avatarUrl}}'></image>
+  <view class='text' wx:if="{{userinfo.nickName}}">你好！{{userinfo.nickName}}</view>
+  <!-- <view wx:if="{{userinfo.gender==1}}">你好！{{userinfo.nickName}}男</view>
+  <view wx:elif="{{userinfo.gender==2}}">你好！{{userinfo.nickName}}女</view>
+  <view wx:else>你好！{{userinfo.nickName}}未知</view> -->
+</view>
+<button
+  wx:if="{{!userinfo}}"
+  open-type="getUserInfo"
+  bindgetuserinfo="bindGetUserInfo"
+>授权登录</button>
+<!-- <text wx:if="{{usercode}}">{{usercode}}</text> -->
