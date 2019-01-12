@@ -1,0 +1,17 @@
+<image class='bg' mode="aspectFill"src="{{bgimage}}"></image>
+<view class='foreground'>
+<view class='animation-element' animation="{{animationData}}"><image class='img'src='{{picUrl}}' ></image></view>
+<view class='info'>
+<view>歌曲：{{music}}</view>
+<view>唱片：{{album}}</view>
+<view>作者：{{name}}</view>
+</view>
+<progress percent="{{progress}}" show-info=''active-mode='backwards' activeColor='palevioletred' stroke-width="8"  backgroundColor="#ccc">
+</progress>
+<view class="container">
+<view class='button' bindtap='bindprev'><image class='icon' src='../../images/prev.png'></image></view>
+<view class='button' bindtap='start'><image class='icon' src='{{isplay?"../../images/stop.png":"../../images/play.png"}}'></image></view>
+<view class='button' bindtap='bindnext'><image class='icon' src='../../images/next.png'></image></view>
+<view class='button' bindtap='bindstart'><image class='icon' src='{{isstart?"../../images/start.png":"../../images/unstart.png"}}'></image></view>
+</view>
+</view>

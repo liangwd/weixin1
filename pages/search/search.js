@@ -1,45 +1,33 @@
-var bmap = require('../../thirds/bmap-wx/bmap-wx.min.js');
+var app = new getApp();
 
   Page({
-  
     data:{
       title: '音乐',
-      innerAudioContext:{},
-      source:"",
-      musiclist:[],
-      currentlist:[],
-      songcount:0,
-      pagenum:0,
-      pagecount:5,
-      pagetotal:0
+      inputvalue:"",
+      songs:[],
+      songcount: 0,
+      songindex:0,//音乐下标
+      pagenum:0,//当前页数
+      pagecount:0,//总页数
+      numOfpage:5
     },
     
     onLoad:function(e){
-      
+      console.log("Music onLoad");
     },
   
     onShow: function (e) {
-      console.log("onShow");
+      console.log("Music onShow");
     },
 
    onReady:function(e) {
-      // 使用 wx.createInnerAudioContext 获取 audio 上下文 context
-      this.innerAudioContext = wx.createInnerAudioContext();
-      this.innerAudioContext.audioPlay = false;
-      //this.innerAudioContext.autoplay = true；
-  },
+     console.log("Music onShow");
+   },
 
-    //
+    //输入框输入查询
     bindKeyInput:function(e){
       var that = this;
-      //console.log("bindKeyInput", e.detail.value);
       that.data.source = e.detail.value;
-      // if (e.detail.value == "")
-      // {
-      //   that.setData({
-      //     musiclist:[]
-      //   });
-      // }
     },
 
 
@@ -49,7 +37,7 @@ var bmap = require('../../thirds/bmap-wx/bmap-wx.min.js');
   //        * @param id 歌曲id
   //          * @param ids 用[]包裹起来的歌曲id 写法 % 5B % 5D
      var id = e.currentTarget.dataset.name;
-     var url ="https://s.music.163.com/discover/playlist/?id="+id;
+     var url ="https://s.music.163.com/api/song/detail//?id="+id;
     // var url = "https://music.163.com/api/song/detail/?id=" +id +"&ids=%5B["+id+"]%5D";
      console.log("getMusicInfo",url);
      wx.request({
@@ -77,7 +65,6 @@ var bmap = require('../../thirds/bmap-wx/bmap-wx.min.js');
           limit: 返回数量
           sub: 意义不明(非必须参数)；取值：false
           type: 搜索类型；取值意义
-
           1 单曲
           10 专辑
           100 歌手
@@ -89,6 +76,7 @@ var bmap = require('../../thirds/bmap-wx/bmap-wx.min.js');
        * http 406 请求头部参数不对
        * 
       */
+      if(that.data.source == "") return;
       var url = "https://s.music.163.com/search/get/?type=1&limit=100&s="+that.data.source;
       console.log("request",url,e.target.dataset);
       wx.request({
@@ -105,35 +93,44 @@ var bmap = require('../../thirds/bmap-wx/bmap-wx.min.js');
             console.log(res.data);
             if(typeof (res.data.result) == undefined)
             {
-                 var arr = res.data.songs.slice(0,that.data.pagecount);
-                 var a = (res.data.songs.length) % (that.data.pagecount);
-                 var b = (res.data.songs.length) / (that.data.pagecount);
-                 var total = (a > 0 ? (b.toFixed() + 1 ): b.toFixed());
-                  that.setData({
-                  musiclist: res.data.songs,
-                  currentlist:arr,
-                  pagenum:1,
-                  pagetotal: total});
-            }else{
-                var arr = res.data.result.songs.slice(0, that.data.pagecount);
-               var a = (res.data.result.songs.length) % (that.data.pagecount);
-                var b = (res.data.result.songs.length) / (that.data.pagecount);
-                var total = (a > 0 ? (b.toFixed() + 1) : b.toFixed());
-                that.setData({
-                 musiclist: res.data.result.songs,
-                currentlist: arr,
-                pagenum: 1,
-                pagetotal: total});
+              var count = res.data.songs.length;
+              var pages = count / 5 + 0.4;
+              console.log("歌曲数", count, "总页数", pages, "页", 5, pages.toFixed());
+              that.setData({
+                songs: res.data.songs,
+                songcount: count,
+                songindex: 0,//音乐下标
+                pagenum: 1,//当前页数
+                pagecount: pages.toFixed()//四舍五入
+              });
+              app.globalData.songs = res.data.songs;
+            }else if(res.data.code == 200){
+              var count = res.data.result.songs.length;
+              var pages = count / 5 + 0.4;
+              console.log("歌曲数", count, "总页数", pages, "页", 5,pages.toFixed());
+              that.setData({
+                 songs: res.data.result.songs,
+                 songcount: count,
+                 songindex: 0,//音乐下标
+                 pagenum: 1,//当前页数
+                 pagecount: pages.toFixed()//四舍五入
+                });
+              app.globalData.songs = res.data.result.songs;
+            }else if(res.data.code == 400){
+                 console.log("未查询到",that.data.source);
             }
           }
         },
         fail:function(res){
-          console.log(res.data);
+          console.log("查询失败",res);
           that.setData({
             musiclist: [],
-            currentlist: [],
-            pagenum: 0,
-            pagetotal: 0});
+            songcount: 0,
+            songindex: 0,//音乐下标
+            pagenum: 0,//当前页数
+            pagecount: 0//四舍五入
+           });
+          app.globalData.songs = [];
         }
       })
     },    
@@ -141,52 +138,61 @@ var bmap = require('../../thirds/bmap-wx/bmap-wx.min.js');
   nextPage:function()
   {
     var that = this;
-    var nextpage = that.data.pagenum;
-    if (nextpage  * that.data.pagecount <= that.data.musiclist.length)
+    var nextpage = that.data.pagenum+1;
+    if(nextpage <= that.data.pagecount)
     {
-        var begin = nextpage * that.data.pagecount;
-        var end = (nextpage +1)* that.data.pagecount;
-        that.setData({
-        currentlist: that.data.musiclist.slice(begin, end),
-        pagenum:nextpage+1
+      that.setData({
+        pagenum: nextpage
       });
     }
   },
 
   prevPage:function()
   {
-    var that = this;
-    var nextpage = that.data.pagenum - 1;
-    if (nextpage>1) {
-      var begin = (nextpage)* that.data.pagecount;
-      var end = (nextpage +1) * that.data.pagecount;
-      that.setData({
-        currentlist: that.data.musiclist.slice(begin, end),
-        pagenum: nextpage
-      })
-    } 
-    else if (nextpage == 1)
-    {
-      that.setData({
-        currentlist: that.data.musiclist.slice(0, that.data.pagecount),
-        pagenum: nextpage
-      })
-    }
+      var that = this;
+      var prevpage = that.data.pagenum -1;
+      if (prevpage >= 1) {
+        that.setData({
+          pagenum: prevpage
+        });
+      }
   },
 
   audioPlay(e) {
-    var url = 'http://music.163.com/song/media/outer/url?id=' + e.currentTarget.dataset.name;
-    console.log(url);
-    this.innerAudioContext.src= url;
-    this.innerAudioContext.src = url;
-    this.innerAudioContext.play();
-    this.innerAudioContext.onPlay(() => {
-      console.log('开始播放')
-    })
-    this.innerAudioContext.onError((res) => {
-      console.log(res.errMsg)
-      console.log(res.errCode)
-    })
+    var index = e.currentTarget.dataset.index;
+    var item = this.data.songs[index];
+    console.log(index,item);
+    /*
+           id: item.id,
+        picUrl: item.album.picUrl,
+        music: item.name,
+        album: item.album.name,
+        name: item.artists[0].name})*/
+    // var obj = {
+    //   id: item.id, 
+    //   picUrl: item.album,
+    //   music: item.name,
+    //   album: item.album.name,
+    //   name: item.artists[0].name
+    // };
+    // var jsonStr = JSON.stringify(obj);
+    // console.log(index, jsonStr);
+    wx.navigateTo({
+      url: '../player/player?index=' + index,
+    });
+
+    // var url = 'http://music.163.com/song/media/outer/url?id=' + e.currentTarget.dataset.name;
+ 
+    // console.log(url);
+    // this.innerAudioContext.src = url;
+    // this.innerAudioContext.play();
+    // this.innerAudioContext.onPlay(() => {
+    //   console.log('开始播放')
+    // })
+    // this.innerAudioContext.onError((res) => {
+    //   console.log(res.errMsg)
+    //   console.log(res.errCode)
+    // })
   },
   audioPause() {
     this.innerAudioContext.pause()

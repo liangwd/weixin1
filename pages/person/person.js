@@ -26,16 +26,19 @@ Page({
       { title: "视频收藏", icon: "", url: "" },
       { title: "音乐收藏", icon: "", url: "" },
       { title: "个人喜好", icon: "", url: "" }
-    ]
+    ],
+    nickName:"",
+    avatarUrl:""
   },
 
   bindGetUserInfo: function (e) {
     var that =this;
-    localObj.setValue("userinfo", e.detail.rawData);
-    console.log(e.detail.rawData);
+    var obj = JSON.parse(e.detail.rawData);
+    console.log(obj);
+    localObj.setValue("userinfo", obj);
     that.setData({
-      userinfo: localObj.getValue("userinfo")
-    })
+      userinfo: localObj.getValue("userinfo"),
+    });
   },
 
   /**
@@ -45,7 +48,7 @@ Page({
     var that = this;
     that.setData({
       usercode: localObj.getValue("code"),
-      userinfo: localObj.getValue("userinfo")
+      userinfo: localObj.getValue("userinfo"),
     });
    // app.getOpenid(that.data.usercode);
   },

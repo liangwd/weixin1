@@ -4,6 +4,8 @@ localObj.clear();
 App({
 
   globalData:{
+     songs:[],
+     index:0,
      AppId:"wxda2abee5df9507eb",
      AppSecret:"58613d84e1380e58f258458059450a92",
     },

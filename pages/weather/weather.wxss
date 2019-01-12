@@ -3,11 +3,16 @@ page {
     background-color:gray;
 
 }
-.bg
-{
+.bg{
+  top: 0rpx;
+  left: 0rpx;
+  position: absolute;
   width: 100%;
-  height: 550rpx;
+  height: 100%;
 }
+ .foreground{
+   position: relative;
+} 
 
 .top
 {
@@ -16,7 +21,7 @@ page {
 .container{
   width: 100%;
   height: 500rpx;
-  position: absolute;
+  /* position: absolute; */
   left: 0rpx;
   top: 0rpx; 
   display: block;
@@ -49,7 +54,7 @@ page {
 }
 .detail{
   width: 100%;
-  position: absolute;
+  /* position: absolute; */
   bottom: 10rpx;
   display: flex;
   flex-direction: row;

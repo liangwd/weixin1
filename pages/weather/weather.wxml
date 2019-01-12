@@ -1,5 +1,5 @@
-<image src='../../images/bg.jpg' class='bg'></image> 
-
+<image class='bg' mode="widthFix" src='../../images/bg.jpg' ></image> 
+<view class='foreground'> 
 
 <view class='container' wx:if='{{weather_data}}'>
 
@@ -68,7 +68,7 @@
       <text  wx:if="{{idx<=2}}" style='font-size:30rpx;color:white;'>{{item.des+'\n'}}</text>
     </view>
   </view>
-
+</view>
 
 
 
