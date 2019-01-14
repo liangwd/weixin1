@@ -1,6 +1,8 @@
-<view class="icp_container"> 
+<image class='bg' mode="aspectFill" src='../../images/bg1.jpg'></image>
+<view class='front'>
+<view class="search_container"> 
   <icon class="searchcion" size='20' type='search'></icon>  
-  <input bindinput='bindKeyInput' placeholder ='音乐搜索(点击查询项播放)' type='text'> </input>
+  <input bindinput='bindKeyInput' placeholder ='音乐搜索' type='text'> </input>
   <view class='ok' data-id='button' bindtap='searchMuisc'>搜索</view>
 </view>
 
@@ -11,11 +13,11 @@
   id='listitem' bindtap='audioPlay' 
   data-index='{{item+(pagenum-1)*5}}'>
   
-    <image id="itemimg" src="{{songs[item+(pagenum-1)*5].album.picUrl}}"></image>
+    <image id="itemimg" mode="scaleToFill" src="{{songs[item+(pagenum-1)*5].picUrl}}"></image>
     <view id="iteminfo">
-      <view id="musicname">歌曲：{{songs[item+(pagenum-1)*5].name}}</view>
-      <view id="albumname">唱片：{{songs[item+(pagenum-1)*5].album.name}}</view>
-      <view id="artname">作者：{{songs[item+(pagenum-1)*5].artists[0].name}}</view>
+      <view id="musicname">歌曲：{{songs[item+(pagenum-1)*5].music}}</view>
+      <view id="albumname">唱片：{{songs[item+(pagenum-1)*5].album}}</view>
+      <view id="artname">作者：{{songs[item+(pagenum-1)*5].name}}</view>
     </view>
 
   </view>
@@ -28,4 +30,4 @@
 <view id='prev' wx:if="{{pagenum > 1}}" bindtap="prevPage">上一页</view>
 <view id='next' wx:if="{{pagenum <= pagecount}}"bindtap="nextPage">下一页</view>
 </view>
-
+</view>

@@ -1,7 +1,8 @@
 /* pages/index/index.wxss */
 page {
     background-color:gray;
-
+    //height: 100%;
+    overflow: hidden;
 }
 .bg{
   top: 0rpx;
@@ -9,9 +10,11 @@ page {
   position: absolute;
   width: 100%;
   height: 100%;
+  z-index: -1;
 }
  .foreground{
-   position: relative;
+   width: 100%;
+   height: 100%;
 } 
 
 .top
@@ -93,7 +96,6 @@ page {
 
 .other{
   width: 100%;
-  display: block;
   flex-direction: column;
   bottom: 0rpx;
 }

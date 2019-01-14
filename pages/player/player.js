@@ -4,6 +4,8 @@ const innerAudioContext = wx.createInnerAudioContext();
 const animation = wx.createAnimation();
 innerAudioContext.autoplay = false;
 innerAudioContext.loop = false;
+var picturenum = 6;
+
 var page =Page({
 
   /**
@@ -14,7 +16,7 @@ var page =Page({
     angle :0,
     timer:null,
     isplay:false,
-    isstart:false,
+    start:0,
     index:0,
     id:0,
     picUrl:"",
@@ -27,17 +29,22 @@ var page =Page({
     bgchangtimer:null
     },
 
+  //
+  skippage:function(){
+    app.skipSearchPage();
+  },
+
 
   //设置背景图片
   changeBgImage:function(){
  
-    if (this.data.bgnum>5)
+    if (this.data.bgnum > picturenum)
     {
       this.data.bgnum = 0;
     }
     var bgurl = "../../images/" + this.data.bgnum+".jpg";
     this.data.bgnum++;
-    console.log("背景图片",bgurl);
+    //console.log("背景图片",bgurl);
     this.setData({
       bgimage:bgurl
     })
@@ -45,9 +52,9 @@ var page =Page({
 
   //设置背景图片
   changeRandomBg: function () {
-    var index = (Math.random() * 10) % 5;
+    var index = (Math.random() * 10) % picturenum;
     var bgurl = "../../images/" + index.toFixed() + ".jpg";
-    console.log("随机背景图片", bgurl);
+    //console.log("随机背景图片", bgurl);
     this.setData({
       bgimage: bgurl
     })
@@ -59,7 +66,7 @@ var page =Page({
     that.data.bgchangtimer = setInterval(
       function () {
         that.changeBgImage();
-      }, 10000);
+      }, 7000);
   },
 
   //清除切换背景图片定时器
@@ -69,7 +76,41 @@ var page =Page({
 
   //收藏
   bindstart: function () {
-    this.setData({ isstart: !this.data.isstart });
+    this.setData({ start: !this.data.start });
+    if (this.data.start){
+      var psx = Math.random()*500;
+      var psy = Math.random() * 1000;
+     var song={
+       id: this.data.id,
+       picUrl: this.data.picUrl,
+       music: this.data.music,
+       album: this.data.album,
+       name: this.data.name,
+       start:1,
+       x: psx,
+       y: psy};
+      if(app.setStartSongs(song)){
+        console.log("收藏成功", song);
+      }else{
+        console.log("收藏失败", song);
+      }
+    }else{
+      var song = {
+        id: this.data.id,
+        picUrl: this.data.idpicUrl,
+        music: this.data.music,
+        album: this.data.album,
+        name: this.data.name,
+        start: 0
+      };
+
+      if (app.removeStartSongs(song)) {
+        console.log("取消收藏成功", song);
+      } else {
+        console.log("取消收藏失败", song);
+      }
+    }
+   
   },
 
   //动画
@@ -86,6 +127,11 @@ var page =Page({
   {
     var that = this;
     that.setData({ isplay:true });
+    that.initSongData();
+
+    if (that.data.timer!=null)
+    clearInterval(that.data.timer);
+    
     that.data.timer = setInterval(
       function () {
         animation.rotate(that.data.angle*5).step({duration:200});
@@ -111,61 +157,17 @@ var page =Page({
     console.log("初始化音乐信息", this.data.index, item);
     this.setData({
       id: item.id,
-      picUrl: item.album.picUrl,
-      music: item.name,
-      album: item.album.name,
-      name: item.artists[0].name
+      picUrl: item.picUrl,
+      music: item.music,
+      album: item.album,
+      name: item.name,
+      start: item.start
     });
   },
 
-
-  //播放音乐
-  audioInit: function () {
-    var that = this;
-    that.initSongData();
-    var url = 'http://music.163.com/song/media/outer/url?id=' + that.data.id;
-    console.log("audioInit url", url);
-
-    innerAudioContext.src = url;
-    that.setData({
-      progress:0
-    })
-    // innerAudioContext.play();
-    innerAudioContext.onPlay(function (res) {
-      console.log('开始播放')
-    });
-    innerAudioContext.onPause(function (res) {
-      console.log('开始暂停')
-    });
-    innerAudioContext.onError(function (res) {
-      console.log("监听音频播放错误事件", res.errMsg)
-      console.log("监听音频播放错误事件", res.errCode)
-    });
-    innerAudioContext.onEnded(function (res) {
-      console.log("onEnded监听音频自然播放至结束的事件", res);
-      that.animationStop();
-    });
-    innerAudioContext.onSeeking(function (res) {
-      console.log("onSeeking监听音频进行跳转操作的事件", res);
-    });
-    innerAudioContext.onSeeked(function (res) {
-      console.log("onSeeked监听音频完成跳转操作的事件", res);
-    });
-    innerAudioContext.onTimeUpdate(function (res) {
-       var progress = (innerAudioContext.currentTime * 100) / innerAudioContext.duration;
-      that.setData({
-        progress:progress
-      });
-
-    });
-    // innerAudioContext.offTimeUpdate(function (res) {
-    //   console.log("offTimeUpdate监听音频播放进度更新事件", res);
-    // });
-  },
 
   //开发播放音乐按钮
   start: function () {
-
     if (!this.data.isplay) {   
       this.audioPlay();
     } else {
@@ -179,8 +181,44 @@ var page =Page({
   },
   
   audioPlay: function () {
-    this.animationPlay();
+    var that = this;
+    that.animationPlay();
+
+    var url = 'http://music.163.com/song/media/outer/url?id=' + that.data.id;
+    console.log("audioInit url", url);
+    innerAudioContext.src = url;
+    innerAudioContext.pause();
     innerAudioContext.play();
+  
+    innerAudioContext.onPlay(function (res) {
+      console.log('开始播放')
+    });
+    innerAudioContext.onPause(function (res) {
+      console.log('开始暂停')
+    });
+    innerAudioContext.onError(function (res) {
+      console.log("监听音频播放错误事件", res.errMsg)
+      console.log("监听音频播放错误事件", res.errCode)
+    });
+    innerAudioContext.onEnded(function (res) {
+      console.log("onEnded监听音频自然播放至结束的事件", res);
+      that.animationStop();
+     // that.bindnext();
+    });
+    innerAudioContext.onSeeking(function (res) {
+      console.log("onSeeking监听音频进行跳转操作的事件", res);
+      that.animationStop();
+    });
+    innerAudioContext.onSeeked(function (res) {
+      console.log("onSeeked监听音频完成跳转操作的事件", res);
+    });
+    innerAudioContext.onTimeUpdate(function (res) {
+      var progress = (innerAudioContext.currentTime * 100) / innerAudioContext.duration;
+      that.setData({
+        progress: progress
+      });
+
+    });   
   },
 
   //上一首
@@ -191,8 +229,8 @@ var page =Page({
     {
       this.data.index = app.globalData.songs.length-1;
     }
+    app.globalData.index = this.data.index;
     this.changeBgImage();
-    this.audioInit();
     this.audioPlay();
   },
 
@@ -203,8 +241,8 @@ var page =Page({
     if (this.data.index == app.globalData.songs.length) {
       this.data.index = 0;
     }
+    app.globalData.index = this.data.index;
     this.changeBgImage();
-    this.audioInit();
     this.audioPlay();
   },
 
@@ -212,11 +250,26 @@ var page =Page({
     * 生命周期函数--监听页面加载
     */
   onLoad: function (options) {
-    this.setData({
-      isplay:false,
-      progress:0,
-      index: options.index
-    })
+ 
+    console.log("player onLoad index",options.index);
+    if (options.index == undefined || options.index < 0)
+    {      
+      this.setData({
+        isplay: false,
+        index: app.globalData.index
+      })
+      this.audioPlay();
+      this.autoChangeBg();
+    }else{
+      this.setData({
+        isplay: false,
+        progress: 0,
+        index: options.index
+      })
+      this.audioPlay();
+      this.autoChangeBg();
+    }
+    
     console.log("player onLoad index", options.index);
     console.log("Animation obj", this.data.animation);
     console.log("innerAudioContext obj", innerAudioContext);
@@ -234,9 +287,6 @@ var page =Page({
    */
   onShow: function () {
     console.log("player onShow");
-    this.audioInit();
-    this.audioPlay();
-    this.autoChangeBg();
   },
 
   /**
@@ -250,8 +300,8 @@ var page =Page({
    * 生命周期函数--监听页面卸载
    */
   onUnload: function () {
-    this.animationStop();
-    this.clearAutoBg();
+     this.animationStop();
+     this.clearAutoBg();
     console.log("player onUnload");
   },
 

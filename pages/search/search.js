@@ -2,7 +2,7 @@ var app = new getApp();
 
   Page({
     data:{
-      title: '音乐',
+      title: '娱乐',
       inputvalue:"",
       songs:[],
       songcount: 0,
@@ -18,10 +18,13 @@ var app = new getApp();
   
     onShow: function (e) {
       console.log("Music onShow");
+      wx.setNavigationBarTitle({
+        title: this.data.title
+      })
     },
 
    onReady:function(e) {
-     console.log("Music onShow");
+     console.log("Music onShow"); 
    },
 
     //输入框输入查询
@@ -93,29 +96,65 @@ var app = new getApp();
             console.log(res.data);
             if(typeof (res.data.result) == undefined)
             {
-              var count = res.data.songs.length;
+              var tmp =[];
+              var songs =[];
+              tmp = res.data.songs;
+              
+              for (var i = 0; i < tmp.length;i++){
+                var song ={
+                  id: tmp[i].id,
+                  picUrl: tmp.album.picUrl,
+                  music: tmp[i].name,
+                  album: tmp[i].album.name,
+                  name: tmp[i].artists[0].name,
+                  start: 0
+                };
+                songs.push(song);
+              }
+              app.globalData.index = 0;
+              app.globalData.songs = songs;
+              console.log("歌曲列表", app.globalData.songs);
+
+              var count = songs.length;
               var pages = count / 5 + 0.4;
-              console.log("歌曲数", count, "总页数", pages, "页", 5, pages.toFixed());
               that.setData({
-                songs: res.data.songs,
+                songs: songs,
                 songcount: count,
                 songindex: 0,//音乐下标
                 pagenum: 1,//当前页数
                 pagecount: pages.toFixed()//四舍五入
               });
-              app.globalData.songs = res.data.songs;
+
             }else if(res.data.code == 200){
-              var count = res.data.result.songs.length;
+
+              var tmp = [];
+              var songs = [];
+              tmp = res.data.result.songs;
+              for (var i = 0; i < tmp.length; i++) {
+                var song = {
+                  id: tmp[i].id,
+                  picUrl: tmp[i].album.picUrl,
+                  music: tmp[i].name,
+                  album: tmp[i].album.name,
+                  name: tmp[i].artists[0].name,
+                  start:0
+                };
+                songs.push(song);
+              }
+              app.globalData.index = 0;
+              app.globalData.songs = songs;
+              console.log("歌曲列表", app.globalData.songs);
+
+              var count = songs.length;
               var pages = count / 5 + 0.4;
-              console.log("歌曲数", count, "总页数", pages, "页", 5,pages.toFixed());
               that.setData({
-                 songs: res.data.result.songs,
-                 songcount: count,
-                 songindex: 0,//音乐下标
-                 pagenum: 1,//当前页数
-                 pagecount: pages.toFixed()//四舍五入
-                });
-              app.globalData.songs = res.data.result.songs;
+                songs: songs,
+                songcount: count,
+                songindex: 0,//音乐下标
+                pagenum: 1,//当前页数
+                pagecount: pages.toFixed()//四舍五入
+              });
+
             }else if(res.data.code == 400){
                  console.log("未查询到",that.data.source);
             }
@@ -160,40 +199,9 @@ var app = new getApp();
 
   audioPlay(e) {
     var index = e.currentTarget.dataset.index;
-    var item = this.data.songs[index];
-    console.log(index,item);
-    /*
-           id: item.id,
-        picUrl: item.album.picUrl,
-        music: item.name,
-        album: item.album.name,
-        name: item.artists[0].name})*/
-    // var obj = {
-    //   id: item.id, 
-    //   picUrl: item.album,
-    //   music: item.name,
-    //   album: item.album.name,
-    //   name: item.artists[0].name
-    // };
-    // var jsonStr = JSON.stringify(obj);
-    // console.log(index, jsonStr);
-    wx.navigateTo({
-      url: '../player/player?index=' + index,
-    });
-
-    // var url = 'http://music.163.com/song/media/outer/url?id=' + e.currentTarget.dataset.name;
- 
-    // console.log(url);
-    // this.innerAudioContext.src = url;
-    // this.innerAudioContext.play();
-    // this.innerAudioContext.onPlay(() => {
-    //   console.log('开始播放')
-    // })
-    // this.innerAudioContext.onError((res) => {
-    //   console.log(res.errMsg)
-    //   console.log(res.errCode)
-    // })
+    app.skipPlayerPage(index);
   },
+
   audioPause() {
     this.innerAudioContext.pause()
   },

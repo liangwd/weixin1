@@ -1,4 +1,4 @@
-<view>
+<!-- <view>
 <text class='title'>域名ICP查询</text>
 <view class="icp_container"> 
 <icon class="searchcion" size='20' type='search'></icon>  
@@ -17,4 +17,23 @@
 <view class="view" wx:if="{{icpdata.type == 1}}">
 未备案或者备案取消，获取最新数据请(更新)
 </view>
-</view>
+</view> -->
+
+<image class="bg" src='../../images/bg1.jpg' mode='aspectFill'></image>
+<!-- <view class="front">
+ <movable-view>
+    <movable-area class="startsong" wx:for="{{songs}}" wx:key="unique" bindtap='audioPlay'>
+      <!-- <image id="picture" mode="scaleToFill" src="{{item.picUrl}}"></image> -->
+      <!-- <movable-area id="music">{{item.music}}</movable-area>
+      <movable-area id="music">{{item.music}}</movable-area>
+    </movable-area>
+  </movable-view>
+</view> --> 
+<movable-area>
+ <movable-view wx:for="{{songs}}" wx:key='unique1'inertia="true" x="{{item.x}}" y="{{item.y}}" out-of-bounds ="true" friction="20" direction="all">
+   <image  class="picture" mode="scaleToFill" src="{{item.picUrl}}"></image> 
+   <view>{{item.music}}</view>
+   <image class="cliked" src='../../images/cliked.png' id='{{index}}'bindtap="playMusic"></image>
+ </movable-view>
+    
+</movable-area>

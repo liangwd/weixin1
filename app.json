@@ -1,9 +1,10 @@
 {
 
 "pages":[
-  "pages/search/search",
+ 
   "pages/home/home",
   "pages/weather/weather",
+  "pages/search/search",
   "pages/map/map",
   "pages/person/person",
   "pages/player/player"
@@ -29,7 +30,7 @@
   "list": [
     {
       "pagePath": "pages/home/home",
-      "text": "首页",
+      "text": "收藏",
       "iconPath": "images/home.png",
       "selectedIconPath": "images/home_selected.png"
     },

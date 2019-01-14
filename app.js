@@ -1,6 +1,6 @@
 var localstorage = require("thirds/localStorage.js");
 var localObj = new localstorage.LocalStorage();
-localObj.clear();
+// localObj.clear();
 App({
 
   globalData:{
@@ -21,8 +21,229 @@ App({
       this.wxLogin();
 
       //获取用户授权
-     this.getUserInfoAuth();
+      this.getUserInfoAuth();
+
+      //
+      //this.initDemoData1();
+
+      console.log("本地缓存收藏数据", localObj.getValue("start")); 
+      console.log("本地缓存数据", localObj.getKeys());
     },
+
+    onShow:function(){
+      console.log("App onShow");
+    },
+
+
+
+  initDemoData: function () {
+    var psx = 10;
+    var psy = 80;
+ 
+    for(var i=0; i<3;i++){
+     var song = {
+        id: 486194111,
+        album: "最美",
+        picUrl: "../../images/2.jpg",
+        name: "美",
+        music: "最美",
+        start: 1,
+        x: psx,
+        y: psy
+      }
+      psx += 25;
+      psy += 80;
+     this.globalData.songs.push(song);
+    }
+    psx = 300;
+    psy = 0;
+    for (var i = 0; i < 3; i++) {
+      psx -= 25;
+      psy += 80;
+      var song = {
+        id: 486194111,
+        album: "最美",
+        picUrl: "../../images/2.jpg",
+        name: "美",
+        music: "最美",
+        start: 1,
+        x: psx,
+        y: psy
+      }
+      this.globalData.songs.push(song);
+    }
+    psx = 140;
+    psy = 320;
+    var song = {
+      id: 486194111,
+      album: "最美",
+      picUrl: "../../images/2.jpg",
+      name: "美",
+      music: "最美",
+      start: 1,
+      x: psx,
+      y: psy
+    }
+    this.globalData.songs.push(song);
+
+    psx = 140;
+    psy = 120;
+    var song = {
+      id: 486194111,
+      album: "丫丫最美",
+      picUrl: "../../images/zuimei.jpg",
+      name: "美",
+      music: "丫丫最美",
+      start: 1,
+      x: psx,
+      y: psy
+    }
+    this.globalData.songs.push(song);
+    localObj.setValue("start", this.globalData.songs); 
+  },
+
+  initDemoData1: function () {
+    var userinfo = localObj.getValue("userinfo");
+    var avatarUrl = userinfo.avatarUrl;
+    var nickName = userinfo.nickName;
+    var psx = 10;
+    var psy = 80;
+
+    for (var i = 0; i < 3; i++) {
+
+      var song = {
+        id: 486194111,
+        album: "最美",
+        picUrl: "../../images/2.jpg",
+        name: "美",
+        music: "最美",
+        start: 1,
+        x: psx,
+        y: psy
+      }
+      psx += 25;
+      psy += 80;
+      this.globalData.songs.push(song);
+    }
+    psx = 270;
+    psy = 0;
+    for (var i = 0; i < 3; i++) {
+      psx -= 25;
+      psy += 80;
+      var song = {
+        id: 486194111,
+        album: "最美",
+        picUrl: "../../images/2.jpg",
+        name: "美",
+        music: "最美",
+        start: 1,
+        x: psx,
+        y: psy
+      }
+      this.globalData.songs.push(song);
+    }
+
+    psx = 125;
+    psy = 320;
+    var song = {
+      id: 486194111,
+      album: "最美",
+      picUrl: "../../images/2.jpg",
+      name: "美",
+      music: "最美",
+      start: 1,
+      x: psx,
+      y: psy
+    }
+    this.globalData.songs.push(song);
+    if (avatarUrl == undefined || avatarUrl == ""){
+      avatarUrl = "../../images/2.jpg"
+    }
+    psx = 125;
+    psy = 120;
+    var song = {
+      id: 486194111,
+      album: "最美",
+      picUrl: avatarUrl,
+      name: nickName,
+      music: nickName+"最美",
+      start: 1,
+      x: psx,
+      y: psy
+    }
+    this.globalData.songs.push(song);
+
+    localObj.setValue("start", this.globalData.songs); 
+  },
+
+/*
+      id: 444523720,
+      album: 
+      picUrl: avatarUrl,
+      music:
+      artists: 
+      name: 
+*/
+  getStartSongs:function(){
+   return localObj.getValue("start");
+  },
+
+  setStartSongs:function(song){
+     if(typeof(song)!="object"|| song.id == undefined || song.id == "") return false;
+     var songs = [];
+     var val =localObj.getValue("start");
+     if(val != "") songs = val;
+     songs.push(song);
+     return localObj.setValue("start", songs); 
+  },
+
+  removeStartSongs:function(song){
+    var songs = [];
+    songs = localObj.getValue("start");
+    for(var i =0;i<songs.length;i++){
+      if(songs[i].id == song.id){
+        songs.splice(i,1);
+        break;
+      }
+    }
+   return localObj.setValue("start", songs); 
+  },
+
+  setSongsFromStart:function(){
+    this.globalData.songs = localObj.getValue("start");
+  },
+
+  //跳到播放页面
+  skipPlayerPage:function(param){
+    console.log("skipPlayerPage song index:",param);
+    if(param == undefined){
+      wx.navigateTo({
+        url: '/pages/player/player'
+      });
+    }else{
+      this.globalData.index = param;
+      wx.navigateTo({
+        url: '/pages/player/player?index='+ param
+      });
+    }
+ 
+  },
+
+  //调到查询页面
+  skipSearchPage: function() {
+    console.log("skipSearchPage");
+    wx.switchTab({
+      url: '../search/search'
+    });
+  },
+ 
+  //调到首页
+  skipHomePage: function () {
+    console.log("skipHomePage");
+    wx.switchTab({
+      url: '../home/home'
+    });
+  },
 
 
   getOpenid:function(loginCode)

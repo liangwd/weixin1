@@ -84,9 +84,9 @@ Page({
     console.log("onLoad监听页面加载");
       var that = this;
 
-      wx.setNavigationBarTitle({
-        title: that.data.title,
-      });
+    wx.setNavigationBarTitle({
+      title: this.data.title
+    })
 
 
     //that.getPosition();

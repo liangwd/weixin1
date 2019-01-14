@@ -4,6 +4,7 @@
 <view class="person">
   <image  class="photo" src='{{userinfo.avatarUrl}}'></image>
   <view class='text' wx:if="{{userinfo.nickName}}">你好啊！{{userinfo.nickName}}</view>
+  <view class='text' wx:else>授权登录后更精彩</view>
   <!-- <view wx:if="{{userinfo.gender==1}}">你好！{{userinfo.nickName}}男</view>
   <view wx:elif="{{userinfo.gender==2}}">你好！{{userinfo.nickName}}女</view>
   <view wx:else>你好！{{userinfo.nickName}}未知</view> -->

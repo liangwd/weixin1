@@ -1,4 +1,5 @@
-<image class='bg' mode="widthFix" src='../../images/bg.jpg' ></image> 
+<image class='bg' mode="widthFix" src='../../images/bg.jpg' ></image>
+
 <view class='foreground'> 
 
 <view class='container' wx:if='{{weather_data}}'>
